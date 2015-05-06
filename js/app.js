@@ -1,12 +1,19 @@
+// This variable is set to true turns on debug functionality
+// which will draw the collision boxes and enable console.log
 var debug = true;
 
 // GameObject represent objects on the screen
 var GameObject = function () {
-    //initialize at 0, 0
+    // X and Y variable determines where the image is drawn on the canvas
     this.x = 0;
     this.y = 0;
+    
+    // dx and dy determine the direction of the object. 
     this.dx = 0;
     this.dy = 0;
+    
+    // Collision Box variables. Determines the bounds of where the box 
+    // where the object can collide with other objects
     this.collStartX = 0;
     this.collEndX = 101;
     this.collStartY = 0;
@@ -29,20 +36,26 @@ GameObject.prototype.update = function(dt) {
 //Draws the GameObject on the screen
 GameObject.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    if(debug)
-    {
+    //if debug is on draw the collision box
+    if(debug) {
         ctx.save();
         ctx.strokeStyle = "red";
-        ctx.strokeRect(this.x + this.collStartX, this.y + this.collStartY, this.collEndX - this.collStartX, this.collEndY - this.collStartY);
+        ctx.strokeRect(this.x + this.collStartX, 
+            this.y + this.collStartY, 
+            this.collEndX - this.collStartX, 
+            this.collEndY - this.collStartY);
         ctx.restore();
     }
-    
 }
 
+// translates a horizontal tile location to a location on the canvas
+// Parameter: tileX, horizontal tile location
 GameObject.prototype.getXLocByTileX = function(tileX) {
     return tileX * this.tileWidth;
 }
 
+// translates a vertical tile location to a location on the canvas
+// Parameter: tileY, vertical tile location
 GameObject.prototype.getYLocByTileY = function(tileY){
     return (tileY * this.tileHeight) - 15;
 }
@@ -50,13 +63,17 @@ GameObject.prototype.getYLocByTileY = function(tileY){
 // Enemies our player must avoid
 var Enemy = function(tileX, tileY, speed) {
     GameObject.call(this);
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
+    
     this.collStartY = 85;
     this.collEndY = 140;
+    
+    //Sets the location of enemy based on tile location
     this.x = this.getXLocByTileX(tileX);
     this.y = this.getYLocByTileY(tileY);
     this.dx = speed;
+    
+    // The image/sprite for our enemies, this uses
+    // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
 }
 Enemy.prototype = Object.create(GameObject.prototype);
@@ -67,6 +84,8 @@ Enemy.prototype.constructor = Enemy;
 // a handleInput() method.
 var Player = function() {
     GameObject.call(this);
+    
+    //Player starting location is always set. 
     this.x = this.getXLocByTileX(2);
     this.y = this.getYLocByTileY(4);
 
@@ -74,6 +93,10 @@ var Player = function() {
     //If the character is not moving, then these serve as the character's location
     this.tileX = 2;
     this.tileY = 4;
+    
+    // moving variable is null when the character is not moving. If he is moving, then 
+    // variable contains a string of the direction that he is moving 
+    // "up", "down", "left", "right"
     this.moving = null;
     this.moveRate = 4;
 
