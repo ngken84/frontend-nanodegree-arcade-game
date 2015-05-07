@@ -80,6 +80,12 @@ GameObject.prototype.isCollided = function(object2) {
     return !(leftPoint > objRight || rightPoint < objLeft || topPoint > objBottom || bottomPoint < objTop);
 }
 
+// Generate random number between two values
+// Parameter : low, low value
+//             high, high value
+GameObject.prototype.getRand = function(low, high) {
+    return Math.floor((Math.random() * (high - low + 1)) + low);
+}
 
 // Enemies our player must avoid
 var Enemy = function(tileX, tileY, speed) {
@@ -118,7 +124,7 @@ var Gem = function(tileX, tileY, duration) {
     this.collEndY = 130;
 
     //set gem's sprite
-    this.sprite = 'images/Gem Blue.png'
+    this.setUpGemImgScore(tileY);
 
     // set gem's life and age
     this.duration = duration;
@@ -138,6 +144,25 @@ Gem.prototype.update = function(dt) {
     if(this.age > this.duration)
     {
 
+    }
+}
+
+// Sets up gem's sprite and point value based on it's vertical tile position
+// Parameter : tileY, tile's Y location
+Gem.prototype.setUpGemImgScore = function(tileY) {
+    switch (tileY)
+    {
+        case 1:
+            this.sprite = 'images/Gem Blue.png';
+            this.points = 3;
+            break;
+        case 2:
+            this.sprite = 'images/Gem Green.png';
+            this.points = 2;
+            break;
+        default:
+            this.sprite = 'images/Gem Orange.png';
+            this.points = 1;
     }
 }
 
