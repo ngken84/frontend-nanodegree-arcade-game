@@ -94,6 +94,9 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
+        allGems.forEach(function(gem) {
+            gem.update(dt);
+        });
         player.update(dt);
     }
     
@@ -105,6 +108,12 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy){
             if(enemy.isCollided(player)) {
                 reset();
+                return;
+            }
+        });
+        allGems.forEach(function(gem) {
+            if(gem.isCollided(player)) {
+                console.log("GEM COLLIDE");
             }
         });
     }
@@ -160,6 +169,9 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
+        allGems.forEach(function(gem) {
+            gem.render();
+        });
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
@@ -174,6 +186,7 @@ var Engine = (function(global) {
     function reset() {
         allEnemies = [new Enemy(-1,2,100), new Enemy(0, 4, 50), new Enemy(1, 3, 25)];
         player = new Player();
+        allGems = [new Gem(1,2)];
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -185,7 +198,10 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/Gem Blue.png',
+        'images/Gem Green.png',
+        'images/Gem Orange.png'
     ]);
     Resources.onReady(init);
 
