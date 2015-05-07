@@ -60,6 +60,27 @@ GameObject.prototype.getYLocByTileY = function(tileY){
     return (tileY * this.tileHeight) - 15;
 }
 
+// Determines if an object has collided with another object
+// Parameter : another GameObject that you want to know if is collided. 
+GameObject.prototype.isCollided = function(object2) {
+    
+    //Calculate the left, right, top and bottom points of the collision box
+    var leftPoint = this.x + this.collStartX;
+    var rightPoint = this.x + this.collEndX;
+    var topPoint = this.y + this.collStartY;
+    var bottomPoint = this.y + this.collEndY;
+
+    //Calculate the left, right, top and bottom points of the other object's collision box
+    var objLeft = object2.x + object2.collStartX;
+    var objRight = object2.x + object2.collEndX;
+    var objTop = object2.y + object2.collStartY;
+    var objBottom = object2.y + object2.collEndY;
+
+    //Easy test to see if it is even in the same area
+    return !(leftPoint > objRight || rightPoint < objLeft || topPoint > objBottom || bottomPoint < objTop);
+}
+
+
 // Enemies our player must avoid
 var Enemy = function(tileX, tileY, speed) {
     GameObject.call(this);
