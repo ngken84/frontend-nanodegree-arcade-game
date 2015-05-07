@@ -100,6 +100,47 @@ var Enemy = function(tileX, tileY, speed) {
 Enemy.prototype = Object.create(GameObject.prototype);
 Enemy.prototype.constructor = Enemy;
 
+// Gems that player is trying to pick up
+// Parameter : tileX, gem's x location
+//             tileY, gem's y location
+//             duration, time gem will remain at that location
+var Gem = function(tileX, tileY, duration) {
+    GameObject.call(this);
+
+    // set gem's draw location
+    this.x = this.getXLocByTileX(tileX);
+    this.y = this.getYLocByTileY(tileY);
+
+    // set gem's collision box
+    this.collStartX = 40;
+    this.collEndX = 61;
+    this.collStartY = 95;
+    this.collEndY = 130;
+
+    //set gem's sprite
+    this.sprite = 'images/Gem Blue.png'
+
+    // set gem's life and age
+    this.duration = duration;
+    this.age = 0;
+}
+Gem.prototype = Object.create(GameObject.prototype);
+Gem.prototype.constructor = Gem;
+// New render function that draws the gem a little smaller than source image
+Gem.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x + 27, this.y + 43, 50, 86);
+}
+
+// New update function that ages the gem by dt
+Gem.prototype.update = function(dt) {
+    GameObject.prototype.update.call(this, dt);
+    this.age += dt;
+    if(this.age > this.duration)
+    {
+
+    }
+}
+
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
@@ -230,7 +271,7 @@ Player.prototype.handleInput = function(direction)
 // Place the player object in a variable called player
 var allEnemies = [];
 var player;
-
+var allGems = [];
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
