@@ -143,7 +143,6 @@ Gem.prototype.update = function(dt) {
     this.age += dt;
     if(this.age > this.duration)
     {
-        this.age = 0;
         this.findNewPosition();
     }
 }
@@ -183,6 +182,9 @@ Gem.prototype.findNewPosition = function() {
     this.y = this.getYLocByTileY(newY);
     this.tileX = newX;
     this.tileY = newY; 
+
+    // Reset gem timer
+    this.age = 0;
 
     // Readjust image and score value
     this.setUpGemImgScore(newY);
