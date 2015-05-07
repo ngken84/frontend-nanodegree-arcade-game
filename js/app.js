@@ -143,7 +143,8 @@ Gem.prototype.update = function(dt) {
     this.age += dt;
     if(this.age > this.duration)
     {
-
+        this.age = 0;
+        this.findNewPosition();
     }
 }
 
@@ -163,6 +164,30 @@ Gem.prototype.setUpGemImgScore = function(tileY) {
         default:
             this.sprite = 'images/Gem Orange.png';
             this.points = 1;
+    }
+}
+
+// Find a new position for the gem that is not the current location
+Gem.prototype.findNewPosition = function() {
+    var newX = this.getRand(0, 4);
+    var newY = this.getRand(1, 4);
+
+    // Make sure that position does not match current position
+    while(newX == this.tileX && newY == this.tileY) {
+        newX = this.getRand(0, 4);
+        newY = this.getRand(1, 4);
+    }
+
+    // Set new position
+    this.x = this.getXLocByTileX(newX);
+    this.y = this.getYLocByTileY(newY);
+    this.tileX = newX;
+    this.tileY = newY; 
+
+    // Readjust image and score value
+    this.setUpGemImgScore(newY);
+    if(debug) {
+        console.log("( " + newX + ", " + newY + ")");
     }
 }
 
