@@ -113,7 +113,7 @@ var Engine = (function(global) {
         });
         allGems.forEach(function(gem) {
             if(gem.isCollided(player)) {
-                console.log("GEM COLLIDE");
+                gem.findNewPosition();
             }
         });
     }
@@ -186,7 +186,7 @@ var Engine = (function(global) {
     function reset() {
         allEnemies = [new Enemy(-1,2,100), new Enemy(0, 4, 50), new Enemy(1, 3, 25)];
         player = new Player();
-        allGems = [new Gem(1,2)];
+        allGems = [new Gem(1,2,5)];
     }
 
     /* Go ahead and load all of the images we know we're going to need to
