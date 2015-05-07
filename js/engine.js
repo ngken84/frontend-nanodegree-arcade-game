@@ -104,7 +104,7 @@ var Engine = (function(global) {
     function checkCollisions() {
         allEnemies.forEach(function(enemy){
             if(enemy.isCollided(player)) {
-                console.log("HIT");
+                reset();
             }
         });
     }
@@ -172,7 +172,8 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+        allEnemies = [new Enemy(-1,2,100), new Enemy(0, 4, 50), new Enemy(1, 3, 25)];
+        player = new Player();
     }
 
     /* Go ahead and load all of the images we know we're going to need to
