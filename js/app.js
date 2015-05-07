@@ -36,7 +36,11 @@ GameObject.prototype.update = function(dt) {
 //Draws the GameObject on the screen
 GameObject.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    //if debug is on draw the collision box
+    this.drawCollisionBox();
+}
+
+// Draws a red collision box if debug is turned on
+GameObject.prototype.drawCollisionBox = function() {
     if(debug) {
         ctx.save();
         ctx.strokeStyle = "red";
@@ -105,6 +109,19 @@ var Enemy = function(tileX, tileY, speed) {
 }
 Enemy.prototype = Object.create(GameObject.prototype);
 Enemy.prototype.constructor = Enemy;
+
+//Render enemy, if speed(this.dx) is negative, draw the image backwards
+Enemy.prototype.render = function() {
+    if(this.dx < 0) {
+        ctx.save();
+        ctx.scale(-1, 1);
+        ctx.drawImage(Resources.get(this.sprite), (-1 * this.x) - 101, this.y);
+        ctx.restore();
+        this.drawCollisionBox();
+    } else {
+        GameObject.prototype.render.call(this);
+    }
+}
 
 // Gems that player is trying to pick up
 // Parameter : tileX, gem's x location
