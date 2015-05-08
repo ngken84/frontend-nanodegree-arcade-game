@@ -113,6 +113,7 @@ Enemy.prototype.constructor = Enemy;
 //Render enemy, if speed(this.dx) is negative, draw the image backwards
 Enemy.prototype.render = function() {
     if(this.dx < 0) {
+        //Draw the image backwards
         ctx.save();
         ctx.scale(-1, 1);
         ctx.drawImage(Resources.get(this.sprite), (-1 * this.x) - 101, this.y);
@@ -123,6 +124,7 @@ Enemy.prototype.render = function() {
     }
 }
 
+// Updated so that if the enemy goes off screen, is respawned in a random location.
 Enemy.prototype.update = function(dt) {
     if(this.x > 550 || this.x < -130) {
         this.findNewPositionAndSpeed();
@@ -131,10 +133,17 @@ Enemy.prototype.update = function(dt) {
 
 }
 
+// Randomly gives an enemy a new speed and new starting location
+// Depending on what row the enemy spawns, will either be moving left or right
 Enemy.prototype.findNewPositionAndSpeed = function() {
+    // Define what row the enemy will spawn
     var tileY = this.getRand(1,5);
+    // Get pixel location of that row;
     var yLoc = this.getYLocByTileY(tileY);
+    // Define speed will be, random value between 100 and 300
     var speed = this.getRand(100, 300);
+    // Determine starting position based on row number.
+    // Even rows have negative speeds and start to the right
     var startingLoc = -130;
     if(tileY % 2 == 0) {
         speed *= -1;
@@ -186,8 +195,9 @@ Gem.prototype.update = function(dt) {
     }
 }
 
-// Sets up gem's sprite and point value based on it's vertical tile position
-// Parameter : tileY, tile's Y location
+// Sets up gem's sprite and point value based on it's horizontal tile position
+// Parameter : newX, tile's X location. Gems on the outside of the screen are
+//                   worth more.
 Gem.prototype.setUpGemImgScore = function(newX) {
     switch (newX)
     {
