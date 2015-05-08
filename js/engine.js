@@ -113,6 +113,7 @@ var Engine = (function(global) {
         });
         allGems.forEach(function(gem) {
             if(gem.isCollided(player)) {
+                score.score += gem.points;
                 gem.findNewPosition();
             }
         });
@@ -187,6 +188,11 @@ var Engine = (function(global) {
         allEnemies = [new Enemy(-1,2,-150), new Enemy(0, 4, -50), new Enemy(1, 3, 100), , new Enemy(1, 1, 100)];
         player = new Player();
         allGems = [new Gem(1,2,5)];
+        //if score is greater than high score, replace high score
+        if(score.score > score.high) {
+            score.high = score.score;
+        }
+        score.score = 0;
     }
 
     /* Go ahead and load all of the images we know we're going to need to
