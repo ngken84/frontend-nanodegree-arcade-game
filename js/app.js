@@ -257,7 +257,7 @@ Gem.prototype.setUpGemImgScore = function(newX) {
 // Find a new position for the gem that is not the current location
 Gem.prototype.findNewPosition = function() {
     PickUp.prototype.findNewPosition.call(this);
-    this.setUpGemImgScore(this.);
+    this.setUpGemImgScore(this.tileX);
 }
 
 // Now write your own player class
