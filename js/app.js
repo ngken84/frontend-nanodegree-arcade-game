@@ -253,7 +253,7 @@ var Player = function() {
     // variable contains a string of the direction that he is moving
     // "up", "down", "left", "right"
     this.moving = null;
-    this.moveRate = 4;
+    this.moveRate = 6;
 
     this.collStartX = 30;
     this.collEndX = 71;
