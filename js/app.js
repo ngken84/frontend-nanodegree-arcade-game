@@ -154,39 +154,38 @@ Enemy.prototype.findNewPositionAndSpeed = function() {
     this.dx = speed;
 }
 
-// Gems that player is trying to pick up
+// Sub class for pick ups in game
 // Parameter : tileX, gem's x location
 //             tileY, gem's y location
 //             duration, time gem will remain at that location
-var Gem = function(tileX, tileY, duration) {
+var PickUp = function(tileX, tileY, duration) {
     GameObject.call(this);
 
-    // set gem's draw location
+    // set pickup's draw location
     this.x = this.getXLocByTileX(tileX);
     this.y = this.getYLocByTileY(tileY);
+    this.tileX = tileX;
+    this.tileY = tileY;
 
-    // set gem's collision box
+    // set pickup's collision box
     this.collStartX = 40;
     this.collEndX = 61;
     this.collStartY = 95;
     this.collEndY = 130;
 
-    //set gem's sprite
-    this.setUpGemImgScore(tileX);
-
-    // set gem's life and age
+    // set pickup's life and age
     this.duration = duration;
     this.age = 0;
 }
-Gem.prototype = Object.create(GameObject.prototype);
-Gem.prototype.constructor = Gem;
+PickUp.prototype = Object.create(GameObject.prototype);
+PickUp.prototype.constructor = PickUp;
 // New render function that draws the gem a little smaller than source image
-Gem.prototype.render = function() {
+PickUp.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x + 27, this.y + 43, 50, 86);
 }
 
-// New update function that ages the gem by dt
-Gem.prototype.update = function(dt) {
+// New update function that ages the pickup by dt
+PickUp.prototype.update = function(dt) {
     GameObject.prototype.update.call(this, dt);
     this.age += dt;
     if(this.age > this.duration)
@@ -194,6 +193,44 @@ Gem.prototype.update = function(dt) {
         this.findNewPosition();
     }
 }
+
+// Find a new position for the pick up that is not the current location
+PickUp.prototype.findNewPosition = function() {
+    var newX = this.getRand(0, 4);
+    var newY = this.getRand(1, 4);
+
+    // Make sure that position does not match current position
+    while(newX == this.tileX && newY == this.tileY && Math.abs(newX - this.tileX) + Math.abs(newY - this.tileY) == 1) {
+        newX = this.getRand(0, 4);
+        newY = this.getRand(1, 4);
+    }
+
+    // Set new position
+    this.x = this.getXLocByTileX(newX);
+    this.y = this.getYLocByTileY(newY);
+    this.tileX = newX;
+    this.tileY = newY;
+
+    // Reset pickup timer
+    this.age = 0;
+
+    if(debug) {
+        console.log("( " + newX + ", " + newY + ")");
+    }
+}
+
+// Gems that player is trying to pick up
+// Parameter : tileX, gem's x location
+//             tileY, gem's y location
+//             duration, time gem will remain at that location
+var Gem = function(tileX, tileY, duration) {
+    PickUp.call(this, tileX, tileY, duration);
+    //set gem's sprite
+    this.setUpGemImgScore(tileX);
+
+}
+Gem.prototype = Object.create(PickUp.prototype);
+Gem.prototype.constructor = Gem;
 
 // Sets up gem's sprite and point value based on it's horizontal tile position
 // Parameter : newX, tile's X location. Gems on the outside of the screen are
@@ -219,29 +256,8 @@ Gem.prototype.setUpGemImgScore = function(newX) {
 
 // Find a new position for the gem that is not the current location
 Gem.prototype.findNewPosition = function() {
-    var newX = this.getRand(0, 4);
-    var newY = this.getRand(1, 4);
-
-    // Make sure that position does not match current position
-    while(newX == this.tileX && newY == this.tileY && Math.abs(newX - this.tileX) + Math.abs(newY - this.tileY) == 1) {
-        newX = this.getRand(0, 4);
-        newY = this.getRand(1, 4);
-    }
-
-    // Set new position
-    this.x = this.getXLocByTileX(newX);
-    this.y = this.getYLocByTileY(newY);
-    this.tileX = newX;
-    this.tileY = newY;
-
-    // Reset gem timer
-    this.age = 0;
-
-    // Readjust image and score value
-    this.setUpGemImgScore(newX);
-    if(debug) {
-        console.log("( " + newX + ", " + newY + ")");
-    }
+    PickUp.prototype.findNewPosition.call(this);
+    this.setUpGemImgScore(this.);
 }
 
 // Now write your own player class
