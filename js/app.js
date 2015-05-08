@@ -223,7 +223,7 @@ Gem.prototype.findNewPosition = function() {
     var newY = this.getRand(1, 4);
 
     // Make sure that position does not match current position
-    while(newX == this.tileX && newY == this.tileY) {
+    while(newX == this.tileX && newY == this.tileY && Math.abs(newX - this.tileX) + Math.abs(newY - this.tileY) == 1) {
         newX = this.getRand(0, 4);
         newY = this.getRand(1, 4);
     }
