@@ -99,10 +99,10 @@ var Engine = (function(global) {
         });
         player.update(dt);
     }
-    
+
     /* This function checks if the player has collided with any enemies
      * If the player has, logs HIT in the console
-     * 
+     *
      */
     function checkCollisions() {
         allEnemies.forEach(function(enemy){
@@ -184,7 +184,7 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        allEnemies = [new Enemy(-1,2,100), new Enemy(0, 4, 50), new Enemy(1, 3, 25)];
+        allEnemies = [new Enemy(-1,2,-150), new Enemy(0, 4, -50), new Enemy(1, 3, 100), , new Enemy(1, 1, 100)];
         player = new Player();
         allGems = [new Gem(1,2,5)];
     }

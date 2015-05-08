@@ -7,12 +7,12 @@ var GameObject = function () {
     // X and Y variable determines where the image is drawn on the canvas
     this.x = 0;
     this.y = 0;
-    
-    // dx and dy determine the direction of the object. 
+
+    // dx and dy determine the direction of the object.
     this.dx = 0;
     this.dy = 0;
-    
-    // Collision Box variables. Determines the bounds of where the box 
+
+    // Collision Box variables. Determines the bounds of where the box
     // where the object can collide with other objects
     this.collStartX = 0;
     this.collEndX = 101;
@@ -44,9 +44,9 @@ GameObject.prototype.drawCollisionBox = function() {
     if(debug) {
         ctx.save();
         ctx.strokeStyle = "red";
-        ctx.strokeRect(this.x + this.collStartX, 
-            this.y + this.collStartY, 
-            this.collEndX - this.collStartX, 
+        ctx.strokeRect(this.x + this.collStartX,
+            this.y + this.collStartY,
+            this.collEndX - this.collStartX,
             this.collEndY - this.collStartY);
         ctx.restore();
     }
@@ -65,9 +65,9 @@ GameObject.prototype.getYLocByTileY = function(tileY){
 }
 
 // Determines if an object has collided with another object
-// Parameter : another GameObject that you want to know if is collided. 
+// Parameter : another GameObject that you want to know if is collided.
 GameObject.prototype.isCollided = function(object2) {
-    
+
     //Calculate the left, right, top and bottom points of the collision box
     var leftPoint = this.x + this.collStartX;
     var rightPoint = this.x + this.collEndX;
@@ -94,15 +94,15 @@ GameObject.prototype.getRand = function(low, high) {
 // Enemies our player must avoid
 var Enemy = function(tileX, tileY, speed) {
     GameObject.call(this);
-    
+
     this.collStartY = 85;
     this.collEndY = 140;
-    
+
     //Sets the location of enemy based on tile location
     this.x = this.getXLocByTileX(tileX);
     this.y = this.getYLocByTileY(tileY);
     this.dx = speed;
-    
+
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -121,6 +121,28 @@ Enemy.prototype.render = function() {
     } else {
         GameObject.prototype.render.call(this);
     }
+}
+
+Enemy.prototype.update = function(dt) {
+    if(this.x > 550 || this.x < -130) {
+        this.findNewPositionAndSpeed();
+    }
+    GameObject.prototype.update.call(this, dt);
+
+}
+
+Enemy.prototype.findNewPositionAndSpeed = function() {
+    var tileY = this.getRand(1,5);
+    var yLoc = this.getYLocByTileY(tileY);
+    var speed = this.getRand(100, 300);
+    var startingLoc = -130;
+    if(tileY % 2 == 0) {
+        speed *= -1;
+        startingLoc = 530;
+    }
+    this.y = yLoc;
+    this.x = startingLoc;
+    this.dx = speed;
 }
 
 // Gems that player is trying to pick up
@@ -166,14 +188,16 @@ Gem.prototype.update = function(dt) {
 
 // Sets up gem's sprite and point value based on it's vertical tile position
 // Parameter : tileY, tile's Y location
-Gem.prototype.setUpGemImgScore = function(tileY) {
-    switch (tileY)
+Gem.prototype.setUpGemImgScore = function(newX) {
+    switch (newX)
     {
-        case 1:
+        case 0:
+        case 4:
             this.sprite = 'images/Gem Blue.png';
             this.points = 3;
             break;
-        case 2:
+        case 3:
+        case 1:
             this.sprite = 'images/Gem Green.png';
             this.points = 2;
             break;
@@ -198,13 +222,13 @@ Gem.prototype.findNewPosition = function() {
     this.x = this.getXLocByTileX(newX);
     this.y = this.getYLocByTileY(newY);
     this.tileX = newX;
-    this.tileY = newY; 
+    this.tileY = newY;
 
     // Reset gem timer
     this.age = 0;
 
     // Readjust image and score value
-    this.setUpGemImgScore(newY);
+    this.setUpGemImgScore(newX);
     if(debug) {
         console.log("( " + newX + ", " + newY + ")");
     }
@@ -215,8 +239,8 @@ Gem.prototype.findNewPosition = function() {
 // a handleInput() method.
 var Player = function() {
     GameObject.call(this);
-    
-    //Player starting location is always set. 
+
+    //Player starting location is always set.
     this.x = this.getXLocByTileX(2);
     this.y = this.getYLocByTileY(4);
 
@@ -224,9 +248,9 @@ var Player = function() {
     //If the character is not moving, then these serve as the character's location
     this.tileX = 2;
     this.tileY = 4;
-    
-    // moving variable is null when the character is not moving. If he is moving, then 
-    // variable contains a string of the direction that he is moving 
+
+    // moving variable is null when the character is not moving. If he is moving, then
+    // variable contains a string of the direction that he is moving
     // "up", "down", "left", "right"
     this.moving = null;
     this.moveRate = 4;
@@ -237,7 +261,7 @@ var Player = function() {
     this.collEndY = 140
 
     this.sprite = 'images/char-boy.png';
-    
+
 }
 Player.prototype = Object.create(GameObject.prototype);
 Player.prototype.constructor = Player;
