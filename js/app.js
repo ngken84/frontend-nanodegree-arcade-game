@@ -172,7 +172,7 @@ var Gem = function(tileX, tileY, duration) {
     this.collEndY = 130;
 
     //set gem's sprite
-    this.setUpGemImgScore(tileY);
+    this.setUpGemImgScore(tileX);
 
     // set gem's life and age
     this.duration = duration;
@@ -368,6 +368,33 @@ Player.prototype.handleInput = function(direction)
     }
 }
 
+//UI element for the score display
+var ScoreDisplay = function() {
+    GameObject.call(this);
+
+    this.x = 20;
+    this.y = 40;
+
+    this.score = 0;
+    this.high = 0;
+}
+ScoreDisplay.prototype = Object.create(GameObject.prototype);
+ScoreDisplay.prototype.constructor = ScoreDisplay;
+ScoreDisplay.prototype.render = function() {
+    ctx.save();
+    // Draw white box to clear out existing text
+    ctx.fillStyle = "White";
+    ctx.fillRect(0,0, 500, 40);
+
+    //Draw the text, both high score and current score;
+    var scoreText = "SCORE : " + this.score;
+    var highText = "HIGH : " + this.high;
+    ctx.font = "24px Impact";
+    ctx.fillStyle = "Black";
+    ctx.fillText(scoreText, this.x, this.y);
+    ctx.fillText(highText, this.x + 250, this.y);
+    ctx.restore();
+}
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
@@ -375,6 +402,7 @@ Player.prototype.handleInput = function(direction)
 var allEnemies = [];
 var player;
 var allGems = [];
+var score = new ScoreDisplay();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
