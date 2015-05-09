@@ -286,10 +286,13 @@ var Star = function(tileX, tileY, duration) {
 Star.prototype = Object.create(PickUp.prototype);
 Star.prototype.constructor = Star;
 
+// Adds a up and down animation
 Star.prototype.update = function(dt) {
     if(this.visible == true) {
+        //If the age is even, it moves up
         if((this.age < 3 && this.age > 2) || this.age < 1) {
             this.dy = 3;
+        //If the age is odd, it moves down
         } else {
             this.dy = -3;
         }
@@ -299,6 +302,7 @@ Star.prototype.update = function(dt) {
     PickUp.prototype.update.call(this, dt);
 }
 
+// Makes player invincible if picked up.
 Star.prototype.pickedUpBy = function(player) {
     player.power = 'invincible';
     player.powerDuration = 7;
@@ -332,17 +336,19 @@ var Player = function() {
 
     this.sprite = 'images/char-cat-girl.png';
 
+    //This set's up the Player's Power Up and duration
     this.power = null;
     this.powerDuration = 0;
-    this.effectCounter = 0;
 
 }
 Player.prototype = Object.create(GameObject.prototype);
 Player.prototype.constructor = Player;
+
 Player.prototype.update = function(dt) {
     //If player has a power up update duration;
     if(this.power != null) {
         this.powerDuration -= dt;
+        //If power duration falls to zero, remove power.
         if(this.powerDuration <= 0) {
             this.power = null;
             this.powerDuration = 0;
@@ -399,6 +405,7 @@ Player.prototype.update = function(dt) {
         }
     }
 }
+
 Player.prototype.handleInput = function(direction)
 {
     //Determine if the character is already moving
@@ -442,7 +449,10 @@ Player.prototype.handleInput = function(direction)
 }
 
 Player.prototype.render = function() {
-    if(this.power == "invincible"  && (this.powerDuration >= 2 || (this.powerDuration < 2 && this.getRand(0,2) % 2 == 0))) {
+    // If player is invincible, give her a different sprite.
+    // Sprite flashes between normal and powered if duration is less than
+    // two seconds
+    if(this.power == "invincible" && (this.powerDuration >= 2 || (this.powerDuration < 2 && this.getRand(0,2) % 2 == 0))) {
         this.sprite = 'images/char-horn-girl.png';
     } else {
         this.sprite = 'images/char-cat-girl.png';
@@ -462,6 +472,7 @@ var ScoreDisplay = function() {
 }
 ScoreDisplay.prototype = Object.create(GameObject.prototype);
 ScoreDisplay.prototype.constructor = ScoreDisplay;
+
 ScoreDisplay.prototype.render = function() {
     ctx.save();
     // Draw white box to clear out existing text
