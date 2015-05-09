@@ -330,7 +330,7 @@ var Player = function() {
     this.collStartY = 85;
     this.collEndY = 140
 
-    this.sprite = 'images/char-boy.png';
+    this.sprite = 'images/char-cat-girl.png';
 
     this.power = null;
     this.powerDuration = 0;
@@ -445,7 +445,7 @@ Player.prototype.render = function() {
     if(this.power == "invincible"  && (this.powerDuration >= 2 || (this.powerDuration < 2 && this.getRand(0,2) % 2 == 0))) {
         this.sprite = 'images/char-horn-girl.png';
     } else {
-        this.sprite = 'images/char-boy.png';
+        this.sprite = 'images/char-cat-girl.png';
     }
     GameObject.prototype.render.call(this);
 }
