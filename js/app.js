@@ -282,10 +282,22 @@ var Star = function(tileX, tileY, duration) {
     PickUp.call(this, tileX, tileY, duration);
     this.coolDownDuration = 12;
     this.sprite = 'images/Star.png';
-
 }
 Star.prototype = Object.create(PickUp.prototype);
 Star.prototype.constructor = Star;
+
+Star.prototype.update = function(dt) {
+    if(this.visible == true) {
+        if((this.age < 3 && this.age > 2) || this.age < 1) {
+            this.dy = 3;
+        } else {
+            this.dy = -3;
+        }
+    } else {
+        this.dy = 0;
+    }
+    PickUp.prototype.update.call(this, dt);
+}
 
 Star.prototype.pickedUpBy = function(player) {
     player.power = 'invincible';
@@ -430,7 +442,7 @@ Player.prototype.handleInput = function(direction)
 }
 
 Player.prototype.render = function() {
-    if(this.power == "invincible") {
+    if(this.power == "invincible"  && (this.powerDuration >= 2 || (this.powerDuration < 2 && this.getRand(0,2) % 2 == 0))) {
         this.sprite = 'images/char-horn-girl.png';
     } else {
         this.sprite = 'images/char-boy.png';
