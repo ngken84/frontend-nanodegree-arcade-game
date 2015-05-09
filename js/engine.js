@@ -94,7 +94,7 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        allGems.forEach(function(gem) {
+        allPickUps.forEach(function(gem) {
             gem.update(dt);
         });
         player.update(dt);
@@ -111,10 +111,10 @@ var Engine = (function(global) {
                 return;
             }
         });
-        allGems.forEach(function(gem) {
-            if(gem.isCollided(player)) {
-                score.score += gem.points;
-                gem.findNewPosition();
+        allPickUps.forEach(function(pickUp) {
+            if(pickUp.isCollided(player) ) {
+                score.score += pickUp.points;
+                pickUp.findNewPosition();
             }
         });
     }
@@ -171,7 +171,7 @@ var Engine = (function(global) {
          * the render function you have defined.
          */
         score.render();
-        allGems.forEach(function(gem) {
+        allPickUps.forEach(function(gem) {
             gem.render();
         });
         allEnemies.forEach(function(enemy) {
@@ -188,7 +188,9 @@ var Engine = (function(global) {
     function reset() {
         allEnemies = [new Enemy(-1,2,-150), new Enemy(0, 4, -50), new Enemy(1, 3, 100), , new Enemy(1, 1, 100)];
         player = new Player();
-        allGems = [new Gem(1,2,5)];
+        allPickUps = [new Gem(1,1,5), new Star(3,3,4)];
+
+
         //if score is greater than high score, replace high score
         if(score.score > score.high) {
             score.high = score.score;
@@ -208,7 +210,8 @@ var Engine = (function(global) {
         'images/char-boy.png',
         'images/Gem Blue.png',
         'images/Gem Green.png',
-        'images/Gem Orange.png'
+        'images/Gem Orange.png',
+        'images/Star.png'
     ]);
     Resources.onReady(init);
 

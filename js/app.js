@@ -176,20 +176,32 @@ var PickUp = function(tileX, tileY, duration) {
     // set pickup's life and age
     this.duration = duration;
     this.age = 0;
+
+    // set point value of pickup
+    this.points = 0;
+
+    // Determines if the PickUp is on screen
+    this.visible = false;
+    // Seconds that it will be disabled
+    this.coolDownDuration = 0;
 }
 PickUp.prototype = Object.create(GameObject.prototype);
 PickUp.prototype.constructor = PickUp;
 // New render function that draws the gem a little smaller than source image
 PickUp.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x + 27, this.y + 43, 50, 86);
+    if(this.visible) {
+        ctx.drawImage(Resources.get(this.sprite), this.x + 27, this.y + 43, 50, 86);
+    }
 }
 
 // New update function that ages the pickup by dt
 PickUp.prototype.update = function(dt) {
     GameObject.prototype.update.call(this, dt);
     this.age += dt;
-    if(this.age > this.duration)
-    {
+    if(!this.visible && this.age > this.coolDownDuration) {
+        this.visible = true;
+        this.age = 0;
+    } else if(this.visible && this.age > this.duration) {
         this.findNewPosition();
     }
 }
@@ -213,6 +225,7 @@ PickUp.prototype.findNewPosition = function() {
 
     // Reset pickup timer
     this.age = 0;
+    this.visible = false;
 
     if(debug) {
         console.log("( " + newX + ", " + newY + ")");
@@ -259,6 +272,18 @@ Gem.prototype.findNewPosition = function() {
     PickUp.prototype.findNewPosition.call(this);
     this.setUpGemImgScore(this.tileX);
 }
+
+// Star acts as a power up
+var Star = function(tileX, tileY, duration) {
+    PickUp.call(this, tileX, tileY, duration);
+    this.coolDownDuration = 12;
+    this.sprite = 'images/Star.png';
+
+}
+Star.prototype = Object.create(PickUp.prototype);
+Star.prototype.constructor = Star;
+
+
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -417,7 +442,7 @@ ScoreDisplay.prototype.render = function() {
 // Place the player object in a variable called player
 var allEnemies = [];
 var player;
-var allGems = [];
+var allPickUps;
 var score = new ScoreDisplay();
 
 // This listens for key presses and sends the keys to your
