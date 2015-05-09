@@ -1,6 +1,6 @@
 // This variable is set to true turns on debug functionality
 // which will draw the collision boxes and enable console.log
-var debug = true;
+var debug = false;
 
 // GameObject represent objects on the screen
 var GameObject = function () {
@@ -194,6 +194,10 @@ PickUp.prototype.render = function() {
     }
 }
 
+PickUp.prototype.pickedUpBy = function(player) {
+    //do nothing
+}
+
 // New update function that ages the pickup by dt
 PickUp.prototype.update = function(dt) {
     GameObject.prototype.update.call(this, dt);
@@ -283,7 +287,10 @@ var Star = function(tileX, tileY, duration) {
 Star.prototype = Object.create(PickUp.prototype);
 Star.prototype.constructor = Star;
 
-
+Star.prototype.pickedUpBy = function(player) {
+    player.power = 'invincible';
+    player.powerDuration = 7;
+}
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -313,10 +320,23 @@ var Player = function() {
 
     this.sprite = 'images/char-boy.png';
 
+    this.power = null;
+    this.powerDuration = 0;
+    this.effectCounter = 0;
+
 }
 Player.prototype = Object.create(GameObject.prototype);
 Player.prototype.constructor = Player;
 Player.prototype.update = function(dt) {
+    //If player has a power up update duration;
+    if(this.power != null) {
+        this.powerDuration -= dt;
+        if(this.powerDuration <= 0) {
+            this.power = null;
+            this.powerDuration = 0;
+        }
+    }
+
     //If moving is null, then the Player is not moving and does not need to be updated
     if(this.moving != null)
     {
@@ -407,6 +427,15 @@ Player.prototype.handleInput = function(direction)
             }
         }
     }
+}
+
+Player.prototype.render = function() {
+    if(this.power == "invincible") {
+        this.sprite = 'images/char-horn-girl.png';
+    } else {
+        this.sprite = 'images/char-boy.png';
+    }
+    GameObject.prototype.render.call(this);
 }
 
 //UI element for the score display

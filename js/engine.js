@@ -113,6 +113,7 @@ var Engine = (function(global) {
         });
         allPickUps.forEach(function(pickUp) {
             if(pickUp.isCollided(player) ) {
+                pickUp.pickedUpBy(player);
                 score.score += pickUp.points;
                 pickUp.findNewPosition();
             }
@@ -211,7 +212,8 @@ var Engine = (function(global) {
         'images/Gem Blue.png',
         'images/Gem Green.png',
         'images/Gem Orange.png',
-        'images/Star.png'
+        'images/Star.png',
+        'images/char-horn-girl.png'
     ]);
     Resources.onReady(init);
 
