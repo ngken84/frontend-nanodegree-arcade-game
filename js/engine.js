@@ -107,12 +107,17 @@ var Engine = (function(global) {
     function checkCollisions() {
         allEnemies.forEach(function(enemy){
             if(enemy.isCollided(player)) {
-                reset();
-                return;
+                if(player.power == 'invincible') {
+                    enemy.findNewPositionAndSpeed();
+                    score.score += 1;
+                } else {
+                    reset();
+                    return;
+                }
             }
         });
         allPickUps.forEach(function(pickUp) {
-            if(pickUp.isCollided(player) ) {
+            if(pickUp.visible && pickUp.isCollided(player) ) {
                 pickUp.pickedUpBy(player);
                 score.score += pickUp.points;
                 pickUp.findNewPosition();
