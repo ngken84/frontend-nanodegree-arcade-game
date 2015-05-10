@@ -36,20 +36,6 @@ GameObject.prototype.update = function(dt) {
 //Draws the GameObject on the screen
 GameObject.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    this.drawCollisionBox();
-};
-
-// Draws a red collision box if debug is turned on
-GameObject.prototype.drawCollisionBox = function() {
-    if(debug) {
-        ctx.save();
-        ctx.strokeStyle = "red";
-        ctx.strokeRect(this.x + this.collStartX,
-            this.y + this.collStartY,
-            this.collEndX - this.collStartX,
-            this.collEndY - this.collStartY);
-        ctx.restore();
-    }
 };
 
 // translates a horizontal tile location to a location on the canvas
@@ -119,7 +105,6 @@ Enemy.prototype.render = function() {
         ctx.scale(-1, 1);
         ctx.drawImage(Resources.get(this.sprite), (-1 * this.x) - 101, this.y);
         ctx.restore();
-        this.drawCollisionBox();
     } else {
         GameObject.prototype.render.call(this);
     }
@@ -145,7 +130,7 @@ Enemy.prototype.findNewPositionAndSpeed = function() {
     // Determine starting position based on row number.
     // Even rows have negative speeds and start to the right
     var startingLoc = -130;
-    if(tileY % 2 == 0) {
+    if(tileY % 2 === 0) {
         speed *= -1;
         startingLoc = 530;
     }
@@ -199,9 +184,9 @@ SuperEnemy.prototype.render = function() {
     //If cooldown is still present
     if(this.cooldown > 0) {
         //Between 0 and 0.5, 1 and 1.5 and 2 and 2.5, display a warning icon
-        if((this.cooldown <= 0.5 && this.cooldown > 0)
-            || (this.cooldown <= 1.5 && this.cooldown > 1)
-            || (this.cooldown <= 2.5 && this.cooldown > 2))
+        if((this.cooldown <= 0.5 && this.cooldown > 0) ||
+            (this.cooldown <= 1.5 && this.cooldown > 1) ||
+            (this.cooldown <= 2.5 && this.cooldown > 2))
         {
             var warningX = 0;
             if(this.x > 0) {
@@ -254,9 +239,7 @@ PickUp.prototype.render = function() {
     }
 };
 
-PickUp.prototype.pickedUpBy = function(player) {
-    //do nothing
-};
+PickUp.prototype.pickedUpBy = function(player) { };
 
 // New update function that ages the pickup by dt
 PickUp.prototype.update = function(dt) {
@@ -350,7 +333,7 @@ Star.prototype.constructor = Star;
 
 // Adds a up and down animation
 Star.prototype.update = function(dt) {
-    if(this.visible == true) {
+    if(this.visible === true) {
         //If the age is even, it moves up
         if((this.age < 3 && this.age > 2) || this.age < 1) {
             this.dy = 3;
@@ -471,8 +454,7 @@ Player.prototype.update = function(dt) {
 Player.prototype.handleInput = function(direction)
 {
     //Determine if the character is already moving
-    if(this.moving == null)
-    {
+    if(this.moving === null) {
         //Determine if the character is able to make the move,
         //Then set their state to moving
         if(direction == 'up')
@@ -514,7 +496,7 @@ Player.prototype.render = function() {
     // If player is invincible, give her a different sprite.
     // Sprite flashes between normal and powered if duration is less than
     // two seconds
-    if(this.power == "invincible" && (this.powerDuration >= 2 || (this.powerDuration < 2 && this.getRand(0,2) % 2 == 0))) {
+    if(this.power == "invincible" && (this.powerDuration >= 2 || (this.powerDuration < 2 && this.getRand(0,2) % 2 === 0))) {
         this.sprite = 'images/char-horn-girl.png';
     } else {
         this.sprite = 'images/char-cat-girl.png';
