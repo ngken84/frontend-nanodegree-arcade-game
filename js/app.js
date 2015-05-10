@@ -369,7 +369,7 @@ var Player = function() {
     this.collStartX = 30;
     this.collEndX = 71;
     this.collStartY = 85;
-    this.collEndY = 140
+    this.collEndY = 140;
 
     this.sprite = 'images/char-cat-girl.png';
 
