@@ -22,7 +22,7 @@ var GameObject = function () {
     this.tileWidth = 101;
     //default have bug image;
     this.sprite = 'images/enemy-bug.png';
-}
+};
 // Update the object's position, required method for game
 // Parameter: dt, a time delta between ticks
 GameObject.prototype.update = function(dt) {
@@ -31,13 +31,13 @@ GameObject.prototype.update = function(dt) {
     // all computers.
     this.x = this.x + (this.dx * dt);
     this.y = this.y + (this.dy * dt);
-}
+};
 
 //Draws the GameObject on the screen
 GameObject.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     this.drawCollisionBox();
-}
+};
 
 // Draws a red collision box if debug is turned on
 GameObject.prototype.drawCollisionBox = function() {
@@ -50,19 +50,19 @@ GameObject.prototype.drawCollisionBox = function() {
             this.collEndY - this.collStartY);
         ctx.restore();
     }
-}
+};
 
 // translates a horizontal tile location to a location on the canvas
 // Parameter: tileX, horizontal tile location
 GameObject.prototype.getXLocByTileX = function(tileX) {
     return tileX * this.tileWidth;
-}
+};
 
 // translates a vertical tile location to a location on the canvas
 // Parameter: tileY, vertical tile location
 GameObject.prototype.getYLocByTileY = function(tileY){
     return (tileY * this.tileHeight) - 15;
-}
+};
 
 // Determines if an object has collided with another object
 // Parameter : another GameObject that you want to know if is collided.
@@ -82,14 +82,14 @@ GameObject.prototype.isCollided = function(object2) {
 
     //Easy test to see if it is even in the same area
     return !(leftPoint > objRight || rightPoint < objLeft || topPoint > objBottom || bottomPoint < objTop);
-}
+};
 
 // Generate random number between two values
 // Parameter : low, low value
 //             high, high value
 GameObject.prototype.getRand = function(low, high) {
     return Math.floor((Math.random() * (high - low + 1)) + low);
-}
+};
 
 // Enemies our player must avoid
 var Enemy = function(tileX, tileY, speed) {
@@ -106,7 +106,8 @@ var Enemy = function(tileX, tileY, speed) {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-}
+};
+
 Enemy.prototype = Object.create(GameObject.prototype);
 Enemy.prototype.constructor = Enemy;
 
@@ -122,7 +123,7 @@ Enemy.prototype.render = function() {
     } else {
         GameObject.prototype.render.call(this);
     }
-}
+};
 
 // Updated so that if the enemy goes off screen, is respawned in a random location.
 Enemy.prototype.update = function(dt) {
@@ -130,8 +131,7 @@ Enemy.prototype.update = function(dt) {
         this.findNewPositionAndSpeed();
     }
     GameObject.prototype.update.call(this, dt);
-
-}
+};
 
 // Randomly gives an enemy a new speed and new starting location
 // Depending on what row the enemy spawns, will either be moving left or right
@@ -152,7 +152,7 @@ Enemy.prototype.findNewPositionAndSpeed = function() {
     this.y = yLoc;
     this.x = startingLoc;
     this.dx = speed;
-}
+};
 
 // New enemy type that has a delay then runs across the screen
 // very quickly
@@ -162,7 +162,7 @@ var SuperEnemy = function(tileX, tileY, speed) {
     // Enemy will only appear once in a while. Cooldown dictates time between
     // appearances
     this.cooldown = 7;
-}
+};
 
 SuperEnemy.prototype = Object.create(Enemy.prototype);
 SuperEnemy.prototype.constructor = SuperEnemy;
@@ -178,7 +178,7 @@ SuperEnemy.prototype.update = function(dt) {
         }
         GameObject.prototype.update.call(this, dt);
     }
-}
+};
 
 // Similar to Enemy findNewPositionAndSpeed but adds more speed and adds
 // cooldown to the user.
@@ -190,7 +190,7 @@ SuperEnemy.prototype.findNewPositionAndSpeed = function() {
         this.dx = -700;
     }
     this.cooldown = this.getRand(4,13);
-}
+};
 
 
 // Renders as normal but 3 seconds before cooldown, it will display a flashing
@@ -211,8 +211,7 @@ SuperEnemy.prototype.render = function() {
         }
     }
     Enemy.prototype.render.call(this);
-
-}
+};
 
 // Sub class for pick ups in game
 // Parameter : tileX, gem's x location
@@ -244,7 +243,8 @@ var PickUp = function(tileX, tileY, duration) {
     this.visible = false;
     // Seconds that it will be disabled
     this.coolDownDuration = 0;
-}
+};
+
 PickUp.prototype = Object.create(GameObject.prototype);
 PickUp.prototype.constructor = PickUp;
 // New render function that draws the gem a little smaller than source image
@@ -252,11 +252,11 @@ PickUp.prototype.render = function() {
     if(this.visible) {
         ctx.drawImage(Resources.get(this.sprite), this.x + 27, this.y + 43, 50, 86);
     }
-}
+};
 
 PickUp.prototype.pickedUpBy = function(player) {
     //do nothing
-}
+};
 
 // New update function that ages the pickup by dt
 PickUp.prototype.update = function(dt) {
@@ -268,7 +268,7 @@ PickUp.prototype.update = function(dt) {
     } else if(this.visible && this.age > this.duration) {
         this.findNewPosition();
     }
-}
+};
 
 // Find a new position for the pick up that is not the current location
 PickUp.prototype.findNewPosition = function() {
@@ -294,7 +294,7 @@ PickUp.prototype.findNewPosition = function() {
     if(debug) {
         console.log("( " + newX + ", " + newY + ")");
     }
-}
+};
 
 // Gems that player is trying to pick up
 // Parameter : tileX, gem's x location
@@ -305,7 +305,8 @@ var Gem = function(tileX, tileY, duration) {
     //set gem's sprite
     this.setUpGemImgScore(tileX);
 
-}
+};
+
 Gem.prototype = Object.create(PickUp.prototype);
 Gem.prototype.constructor = Gem;
 
@@ -329,20 +330,21 @@ Gem.prototype.setUpGemImgScore = function(newX) {
             this.sprite = 'images/Gem Orange.png';
             this.points = 1;
     }
-}
+};
 
 // Find a new position for the gem that is not the current location
 Gem.prototype.findNewPosition = function() {
     PickUp.prototype.findNewPosition.call(this);
     this.setUpGemImgScore(this.tileX);
-}
+};
 
 // Star acts as a power up
 var Star = function(tileX, tileY, duration) {
     PickUp.call(this, tileX, tileY, duration);
     this.coolDownDuration = 12;
     this.sprite = 'images/Star.png';
-}
+};
+
 Star.prototype = Object.create(PickUp.prototype);
 Star.prototype.constructor = Star;
 
@@ -360,13 +362,13 @@ Star.prototype.update = function(dt) {
         this.dy = 0;
     }
     PickUp.prototype.update.call(this, dt);
-}
+};
 
 // Makes player invincible if picked up.
 Star.prototype.pickedUpBy = function(player) {
     player.power = 'invincible';
     player.powerDuration = 7;
-}
+};
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -399,8 +401,8 @@ var Player = function() {
     //This set's up the Player's Power Up and duration
     this.power = null;
     this.powerDuration = 0;
+};
 
-}
 Player.prototype = Object.create(GameObject.prototype);
 Player.prototype.constructor = Player;
 
@@ -464,7 +466,7 @@ Player.prototype.update = function(dt) {
             }
         }
     }
-}
+};
 
 Player.prototype.handleInput = function(direction)
 {
@@ -506,7 +508,7 @@ Player.prototype.handleInput = function(direction)
             }
         }
     }
-}
+};
 
 Player.prototype.render = function() {
     // If player is invincible, give her a different sprite.
@@ -518,7 +520,7 @@ Player.prototype.render = function() {
         this.sprite = 'images/char-cat-girl.png';
     }
     GameObject.prototype.render.call(this);
-}
+};
 
 //UI element for the score display
 var ScoreDisplay = function() {
@@ -529,7 +531,8 @@ var ScoreDisplay = function() {
 
     this.score = 0;
     this.high = 0;
-}
+};
+
 ScoreDisplay.prototype = Object.create(GameObject.prototype);
 ScoreDisplay.prototype.constructor = ScoreDisplay;
 
@@ -547,7 +550,7 @@ ScoreDisplay.prototype.render = function() {
     ctx.fillText(scoreText, this.x, this.y);
     ctx.fillText(highText, this.x + 250, this.y);
     ctx.restore();
-}
+};
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
