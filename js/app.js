@@ -293,16 +293,16 @@ Gem.prototype.setUpGemImgScore = function(newX) {
     {
         case 0:
         case 4:
-            this.sprite = 'images/Gem Blue.png';
+            this.sprite = 'images/Gem-Blue.png';
             this.points = 3;
             break;
         case 3:
         case 1:
-            this.sprite = 'images/Gem Green.png';
+            this.sprite = 'images/Gem-Green.png';
             this.points = 2;
             break;
         default:
-            this.sprite = 'images/Gem Orange.png';
+            this.sprite = 'images/Gem-Orange.png';
             this.points = 1;
     }
 };
@@ -383,7 +383,7 @@ Player.prototype.constructor = Player;
 
 Player.prototype.update = function(dt) {
     //If player has a power up update duration;
-    if(this.power != null) {
+    if(this.power !== null) {
         this.powerDuration -= dt;
         //If power duration falls to zero, remove power.
         if(this.powerDuration <= 0) {
@@ -393,7 +393,7 @@ Player.prototype.update = function(dt) {
     }
 
     //If moving is null, then the Player is not moving and does not need to be updated
-    if(this.moving != null)
+    if(this.moving !== null)
     {
         if(this.moving == 'up')
         {
