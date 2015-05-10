@@ -154,6 +154,66 @@ Enemy.prototype.findNewPositionAndSpeed = function() {
     this.dx = speed;
 }
 
+// New enemy type that has a delay then runs across the screen
+// very quickly
+var SuperEnemy = function(tileX, tileY, speed) {
+    Enemy.call(this, tileX, tileY, speed);
+
+    // Enemy will only appear once in a while. Cooldown dictates time between
+    // appearances
+    this.cooldown = 7;
+}
+
+SuperEnemy.prototype = Object.create(Enemy.prototype);
+SuperEnemy.prototype.constructor = SuperEnemy;
+
+// Prevent enemy from moving until cooldown is less than zero.
+// Otherwise acts like a regular enemy.
+SuperEnemy.prototype.update = function(dt) {
+    if(this.cooldown > 0) {
+        this.cooldown -= dt;
+    } else {
+        if(this.x > 650 || this.x < -230) {
+            this.findNewPositionAndSpeed();
+        }
+        GameObject.prototype.update.call(this, dt);
+    }
+}
+
+// Similar to Enemy findNewPositionAndSpeed but adds more speed and adds
+// cooldown to the user.
+SuperEnemy.prototype.findNewPositionAndSpeed = function() {
+    Enemy.prototype.findNewPositionAndSpeed.call(this);
+    if(this.dx > 0) {
+        this.dx = 700;
+    } else {
+        this.dx = -700;
+    }
+    this.cooldown = this.getRand(4,13);
+}
+
+
+// Renders as normal but 3 seconds before cooldown, it will display a flashing
+// waring icon
+SuperEnemy.prototype.render = function() {
+    //If cooldown is still present
+    if(this.cooldown > 0) {
+        //Between 0 and 0.5, 1 and 1.5 and 2 and 2.5, display a warning icon
+        if((this.cooldown <= 0.5 && this.cooldown > 0)
+            || (this.cooldown <= 1.5 && this.cooldown > 1)
+            || (this.cooldown <= 2.5 && this.cooldown > 2))
+        {
+            var warningX = 0;
+            if(this.x > 0) {
+                warningX = this.getXLocByTileX(4);
+            }
+            ctx.drawImage(Resources.get('images/warning.png'), warningX, this.y);
+        }
+    }
+    Enemy.prototype.render.call(this);
+
+}
+
 // Sub class for pick ups in game
 // Parameter : tileX, gem's x location
 //             tileY, gem's y location
@@ -496,6 +556,7 @@ var allEnemies = [];
 var player;
 var allPickUps;
 var score = new ScoreDisplay();
+var superEnemy;
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.

@@ -97,6 +97,7 @@ var Engine = (function(global) {
         allPickUps.forEach(function(gem) {
             gem.update(dt);
         });
+        superEnemy.update(dt);
         player.update(dt);
     }
 
@@ -116,6 +117,14 @@ var Engine = (function(global) {
                 }
             }
         });
+        if(superEnemy.isCollided(player)) {
+            if(player.power == 'invincible') {
+                superEnemy.findNewPositionAndSpeed();
+                score.score += 1;
+            } else {
+                reset();
+            }
+        }
         allPickUps.forEach(function(pickUp) {
             if(pickUp.visible && pickUp.isCollided(player) ) {
                 pickUp.pickedUpBy(player);
@@ -185,6 +194,8 @@ var Engine = (function(global) {
         });
 
         player.render();
+        superEnemy.render();
+
     }
 
     /* This function does nothing but it could have been a good place to
@@ -195,7 +206,7 @@ var Engine = (function(global) {
         allEnemies = [new Enemy(-1,2,-150), new Enemy(0, 4, -50), new Enemy(1, 3, 100), , new Enemy(1, 1, 100)];
         player = new Player();
         allPickUps = [new Gem(1,1,5), new Star(3,3,4)];
-
+        superEnemy = new SuperEnemy(-1, 3, 700);
 
         //if score is greater than high score, replace high score
         if(score.score > score.high) {
@@ -218,7 +229,8 @@ var Engine = (function(global) {
         'images/Gem Green.png',
         'images/Gem Orange.png',
         'images/Star.png',
-        'images/char-horn-girl.png'
+        'images/char-horn-girl.png',
+        'images/warning.png'
     ]);
     Resources.onReady(init);
 
