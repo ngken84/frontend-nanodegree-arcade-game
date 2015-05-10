@@ -1,7 +1,3 @@
-// This variable is set to true turns on debug functionality
-// which will draw the collision boxes and enable console.log
-var debug = false;
-
 // GameObject represent objects on the screen
 var GameObject = function () {
     // X and Y variable determines where the image is drawn on the canvas
@@ -273,10 +269,6 @@ PickUp.prototype.findNewPosition = function() {
     // Reset pickup timer
     this.age = 0;
     this.visible = false;
-
-    if(debug) {
-        console.log("( " + newX + ", " + newY + ")");
-    }
 };
 
 // Gems that player is trying to pick up
