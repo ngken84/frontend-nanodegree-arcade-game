@@ -1,5 +1,9 @@
 frontend-nanodegree-arcade-game
 ===============================
+HOW TO PLAY:
+1. Download the following file: https://github.com/ngken84/frontend-nanodegree-arcade-game/archive/master.zip
+2. Unzip it.
+3. Open index.html using your browser
 
 GOAL OF THE GAME:
 Eileen the cat girl doesn't have a problem crossing the road. She's in it to win it. Score as many points as you can by picking up gem stones that appear along Bug Crossing Road, but be careful, these bugs don't seem to give any regard for cat-girl life and they will run her over if she get's in their way. 
