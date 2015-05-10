@@ -452,7 +452,7 @@ Player.prototype.handleInput = function(direction)
         if(direction == 'up')
         {
             var target = this.tileY - 1;
-            if(target >= 1) {
+            if(target >= 0) {
                 this.tileY = target;
                 this.moving = direction;
             }

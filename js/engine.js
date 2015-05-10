@@ -81,6 +81,9 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         checkCollisions();
+        if(player.tileY === 0) {
+            reset();
+        }
     }
 
     /* This is called by the update function  and loops through all of the
